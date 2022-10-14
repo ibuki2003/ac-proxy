@@ -1,6 +1,7 @@
 use actix_web::{get, web, http, Responder, HttpResponse, HttpRequest};
 use regex::Regex;
 use mysql_async::prelude::*;
+use log::error;
 
 // #[macro_use]
 // extern crate lazy_static;
@@ -46,7 +47,7 @@ pub async fn proxy_service(data: web::Data<crate::AppState>, req: HttpRequest) -
       if let Err(e) = save_cache(&path,
           if res.status().is_success() { Some(&body) } else { None },
           &content_type, &date, &mut conn).await {
-        println!("{}", e);
+        error!("save error {}", e);
         // return HttpResponse::InternalServerError().body("500 Internal Server Error");
       }
       let body = if res.status().is_success() { body } else { String::from("not found") };
@@ -57,7 +58,7 @@ pub async fn proxy_service(data: web::Data<crate::AppState>, req: HttpRequest) -
       return res
     },
     Err(e) => {
-      println!("Error: {}", e);
+      error!("req error {}", e);
       return HttpResponse::InternalServerError().body("500 Internal Server Error");
     }
   }
@@ -69,7 +70,7 @@ async fn get_cache(path: &String, conn: &mut mysql_async::Conn) -> Option<HttpRe
     .first::<(Option<String>, Option<String>, String), _>(conn)
     .await
     .unwrap_or_else(|e| {
-      println!("err: {}", e);
+      error!("get error {}", e);
       return None;
     })
     .map(|(body, content_type, date)| {

@@ -12,12 +12,14 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init();
     dotenv().ok();
 
     let pool = mysql_async::Pool::from_url(env::var("DATABASE_URL").expect("DATABASE_URL must be set")).unwrap();
 
     HttpServer::new(move || {
         App::new()
+            .wrap(middleware::Logger::default())
             .wrap(middleware::DefaultHeaders::new()
                 .add(("Access-Control-Allow-Origin" , "*"))
                 .add(("Access-Control-Allow-Methods", "*"))
