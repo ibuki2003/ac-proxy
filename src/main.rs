@@ -6,7 +6,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[get("/")]
 async fn index() -> impl Responder {
-    let response = format!("ac-proxy {} maintained by ibuki2003", VERSION);
+    let response = format!("ac-proxy {}\nhttps://github.com/ibuki2003/ac-proxy\n", VERSION);
     HttpResponse::Ok().body(response)
 }
 
