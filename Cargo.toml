@@ -6,3 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+actix-web = "4.2.1"
+awc = { version = "3.0.1", features = ["openssl"] }
+dotenv = "0.15.0"
+lazy_static = "1.4.0"
+mysql_async = "0.30.0"
+openssl = "0.10.42"
+regex = "1.6.0"
