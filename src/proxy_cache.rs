@@ -59,7 +59,7 @@ pub async fn proxy_service(data: web::Data<crate::AppState>, req: HttpRequest) -
     },
     Err(e) => {
       error!("req error {}", e);
-      return HttpResponse::InternalServerError().body("500 Internal Server Error");
+      return HttpResponse::BadGateway().body("502 Bad Gateway");
     }
   }
 }
